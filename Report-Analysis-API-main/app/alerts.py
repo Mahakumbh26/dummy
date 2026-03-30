@@ -53,7 +53,7 @@ def _ensure_table(conn):
     """Create alerts table if it doesn't exist."""
     with conn.cursor() as cur:
         cur.execute("""
-            CREATE TABLE IF NOT EXISTS alerts (
+            CREATE TABLE IF NOT EXISTS email (
                 id          SERIAL PRIMARY KEY,
                 alertname   VARCHAR(255),
                 severity    VARCHAR(50),
@@ -98,7 +98,7 @@ async def receive_alerts(request: Request):
 
             cur.execute(
                 """
-                INSERT INTO alerts (alertname, severity, project, instance, status, description, email_to)
+                INSERT INTO email (alertname, severity, project, instance, status, description, email_to)
                 VALUES (%s, %s, %s, %s, %s, %s, %s)
                 """,
                 (
@@ -140,7 +140,7 @@ def get_alerts(
     """
     conn = _get_conn()
 
-    query  = "SELECT id, alertname, severity, project, instance, status, description, email_to, created_at FROM alerts"
+    query  = "SELECT id, alertname, severity, project, instance, status, description, email_to, created_at FROM email"
     params = []
     where  = []
 
